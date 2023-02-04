@@ -69,7 +69,7 @@ jobs:
       #     DBPASSWORD: debug
       #     DBHOST: 127.0.0.1
       #     DBPORT: ${{ job.services.mysql.ports[3306] }}
-        run: |
-          cd apps/
-          python manage.py migrate
-          # python manage.py test
+      #   run: |
+      #     cd apps/
+      #     python manage.py migrate
+      #     # python manage.py test
