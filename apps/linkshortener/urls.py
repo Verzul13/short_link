@@ -1,9 +1,8 @@
-from django.urls import path
+from django.urls import path, include
 
-from linkshortener.api_views import test
 
 app_name = 'linkshortener'
 
 urlpatterns = [
-    path("test/", test, name='test')
+    path("v1/", include("linkshortener.api_router")),
 ]

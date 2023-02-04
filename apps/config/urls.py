@@ -41,7 +41,7 @@ urlpatterns = [
     path('i18n/', include('django.conf.urls.i18n')),
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
 
-    path("linkshortener/", include("linkshortener.urls", namespace='linkshortener')),
+    path("api/", include("linkshortener.urls", namespace='linkshortener')),
     # path('', include('django_prometheus.urls')),
 ]
 urlpatterns += i18n_patterns(
