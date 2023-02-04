@@ -3,7 +3,7 @@ from rest_framework.routers import DefaultRouter, SimpleRouter
 
 from django.conf import settings
 
-from .api_views import  ShortLinkView
+from .api_views import ShortLinkView
 
 
 if settings.DEBUG:
