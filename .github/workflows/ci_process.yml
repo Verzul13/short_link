@@ -34,6 +34,12 @@ jobs:
     #     ports:
     #       - 3306:3306
     #     options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      mysql:
+        image: mysql:latest
+        env:
+          MYSQL_ROOT_PASSWORD: debug
+          MYSQL_DATABASE: linkshortener
+        ports: ['3306:3306']
 
     steps:
       - uses: actions/checkout@v2
@@ -54,22 +60,29 @@ jobs:
             "migrations"
             "settings.py"
           max-line-length: "120"
-      # - name: Run Unit Tests
-      #   env:
-      #     # POSTGRES_HOST: 127.0.0.1
-      #     # POSTGRES_PORT: 5432
-      #     # POSTGRES_USER: postgres
-      #     # POSTGRES_PASSWORD: postgres
-      #     # POSTGRES_DB: github_actions
-      #     # DATABASE_ENGINE: django.db.backends.postgresql
-      #     MYSQL_PORT: 3306
-      #     MYSQL_NAME: linkshortener
-      #     MYSQL_ROOT_PASSWORD: debug
-      #     MYSQL_PASS: debug
-      #     MYSQL_DATABASE: linkshortener
-      #     DATABASE_ENGINE: 'django.db.backends.mysql'
-      #     NAME: 'linkshortener'
-      #     USER: root
+
+      - name: Run Unit Tests
+        env:
+          # POSTGRES_HOST: 127.0.0.1
+          # POSTGRES_PORT: 5432
+          # POSTGRES_USER: postgres
+          # POSTGRES_PASSWORD: postgres
+          # POSTGRES_DB: github_actions
+          # DATABASE_ENGINE: django.db.backends.postgresql
+          # MYSQL_PORT: 3306
+          # MYSQL_NAME: linkshortener
+          # MYSQL_ROOT_PASSWORD: debug
+          # MYSQL_PASS: debug
+          # MYSQL_DATABASE: linkshortener
+          # DATABASE_ENGINE: 'django.db.backends.mysql'
+          # NAME: 'linkshortener'
+          # USER: root
+          DBENGINE: django.db.backends.mysql
+          DBNAME: linkshortener
+          DBUSER: root
+          DBPASSWORD: debug
+          DBHOST: 127.0.0.1
+          DBPORT: ${{ job.services.mysql.ports[3306] }}
         run: |
           cd apps/
           python manage.py migrate
