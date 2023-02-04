@@ -1,0 +1,76 @@
+name: Django CI TEst
+
+on: [pull_request]
+
+env:
+  TEST_GITHUB_CI: 1
+  DEBUG: 0
+  DJANGO_ALLOWED_HOSTS: localhost 127.0.0.1 0.0.0.0 django
+  SITE_ID: 1
+  SECRET_KEY: ^l)7d*%h&db4uft@dk%h-w&nup#pu%)a!d)c7jwgoixo5_hm0$
+  PIP_CACHE_DIR: "/.cache/pip"
+
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    strategy:
+      max-parallel: 4
+      matrix:
+        python-version: [3.8]
+
+    services:
+      mysql:
+        image: mysql:latest
+        env:
+          # POSTGRES_USER: postgres
+          # POSTGRES_PASSWORD: postgres
+          # POSTGRES_DB: github_actions
+          MYSQL_PORT: 3306
+          MYSQL_NAME: mysql
+          MYSQL_ROOT_PASSWORD: debug
+          MYSQL_PASS: debug
+          MYSQL_DATABASE: linkshortener
+        ports:
+          - 3306:3306
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
+          pip install pytest-django
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+        with:
+          exclude: |
+            "__init__.py"
+            "migrations"
+            "settings.py"
+          max-line-length: "120"
+      - name: Run Unit Tests
+        env:
+          # POSTGRES_HOST: 127.0.0.1
+          # POSTGRES_PORT: 5432
+          # POSTGRES_USER: postgres
+          # POSTGRES_PASSWORD: postgres
+          # POSTGRES_DB: github_actions
+          # DATABASE_ENGINE: django.db.backends.postgresql
+          MYSQL_PORT: 3306
+          MYSQL_NAME: linkshortener
+          MYSQL_ROOT_PASSWORD: debug
+          MYSQL_PASS: debug
+          MYSQL_DATABASE: linkshortener
+          DATABASE_ENGINE: 'django.db.backends.mysql'
+          NAME: 'linkshortener'
+          USER: root
+        run: |
+          cd apps/
+          python manage.py migrate
+          # python manage.py test

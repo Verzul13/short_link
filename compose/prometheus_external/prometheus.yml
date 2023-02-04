@@ -1,0 +1,33 @@
+global:
+  scrape_interval: 30s
+
+scrape_configs:
+  - job_name: 'app'
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{job="app"}'
+    static_configs:
+      - targets:
+        - 'localhost:9091'
+
+  - job_name: 'gunicorn'
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{job="gunicorn"}'
+    static_configs:
+      - targets:
+        - 'localhost:9091'
+
+  - job_name: 'nginx'
+    honor_labels: true
+    metrics_path: '/federate'
+    params:
+      'match[]':
+        - '{job="nginx"}'
+    static_configs:
+      - targets:
+        - 'localhost:9091'

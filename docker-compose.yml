@@ -1,0 +1,183 @@
+version: '3.3'
+
+volumes:
+  local_mysql_data:
+  local_redis_data:
+  static_volume:
+  local_prometheus_data:
+
+networks:
+  proxynet:
+    driver: bridge
+
+services:
+  # BACKEND
+
+  nginx:
+    build:
+      context: .
+      dockerfile: ./compose/nginx/Dockerfile
+    expose:
+      - "8080"
+    ports:
+      - 80:80
+    depends_on:
+      - django
+    volumes:
+      - static_volume:/esu/static
+      - ./media:/esu/media
+    networks:
+      - proxynet
+
+  django:
+    build:
+      context: .
+      dockerfile: ./compose/Dockerfile
+    # entrypoint: /entrypoint
+    volumes:
+      - ./apps:/shortlink
+      - static_volume:/shortlink/static
+      - ./media:/shortlink/media
+    ports:
+      - "8009:8009" # gunicorn
+    depends_on:
+      - db
+      - redis
+      - rabbitmq
+    env_file:
+      - .envs/.django
+      - .envs/.mysql
+    command: /start
+    restart: on-failure
+    networks:
+      - proxynet
+
+  # DATABASES
+  rabbitmq:
+      image: tutum/rabbitmq
+      env_file:
+          - .envs/.rabbit
+      ports:
+          - 5672:5672   
+          - 15672:15672
+      networks:
+          - proxynet
+  
+  db:
+    image: mysql:latest
+    command: --default-authentication-plugin=mysql_native_password
+    env_file:
+      - .envs/.mysql
+    volumes:
+      - local_mysql_data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    networks:
+      - proxynet
+
+
+  redis:
+    image: redis:6.0.1-alpine
+    env_file:
+      - .envs/.redis
+    ports:
+      - '6379:6379'
+    volumes:
+      - local_redis_data:/data
+    command: >
+      --maxclients 20000
+      --timeout 300
+      --appendonly yes
+      --replica-read-only no 
+    networks:
+      - proxynet
+
+
+  # CELERY
+
+  celery:
+    build:
+      context: .
+      dockerfile: ./compose/Dockerfile
+    command: celery -A config.celery worker -l INFO -E
+    env_file:
+      - .envs/.django
+      - .envs/.mysql
+    volumes:
+      - ./apps:/shortlink
+      - local_redis_data:/data
+    depends_on:
+      - django
+      - redis
+      - db
+      - rabbitmq
+    networks:
+      - proxynet
+
+  celery-beat:
+    build:
+      context: .
+      dockerfile: ./compose/Dockerfile
+    command:  celery -A config.celery beat -l INFO --scheduler django_celery_beat.schedulers:DatabaseScheduler
+    volumes:
+      - ./apps:/shortlink
+      - local_redis_data:/data
+    env_file:
+      - .envs/.django
+      - .envs/.mysql
+    depends_on:
+      - django
+      - redis
+      - db
+      - rabbitmq
+    networks:
+      - proxynet
+    
+  # # MONITORING
+
+  prometheus:
+    image: prom/prometheus
+    volumes:
+      - ./compose/prometheus/:/etc/prometheus/
+      - local_prometheus_data:/prometheus
+    ports:
+      - "9091:9090"
+    networks:
+      - proxynet
+
+  loki:
+    image: grafana/loki:2.7.3
+    ports:
+      - "3100:3100"
+    volumes:
+       - ./compose/loki:/etc/loki
+    command: -config.file=/etc/loki/loki-config.yml
+    networks:
+      - proxynet
+
+  # grafana:
+  #   image: grafana/grafana
+  #   depends_on:
+  #     - prometheus
+  #     - loki
+  #   ports:
+  #     - 3000:3000
+  #   volumes:
+  #     - local_grafana_data:/var/lib/grafana
+  #     - ./grafana/dashboards:/var/lib/grafana/dashboards
+  #     - ./grafana/provisioning:/etc/grafana/provisioning
+  #   env_file:
+  #     - .envs/.grafana
+  #   networks:
+  #     - proxynet
+
+ 
+  # promtail:
+  #   image: grafana/promtail:2.4.0
+  #   volumes:
+  #     - ./apps/logs:/var/log
+  #     - ./compose/promtail:/etc/promtail
+  #   command: -config.file=/etc/promtail/promtail-config.yml
+  #   # restart: unless-stoped
+  #   networks:
+  #     - proxynet

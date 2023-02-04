@@ -1,0 +1,38 @@
+global:
+  # external_labels:
+  #   monitor: 'internal-1'
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  - job_name: backend_core
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+        - django:8009
+  - job_name: prometheus
+    static_configs:
+      - targets: ['localhost:9090']
+  - job_name: flower
+    static_configs:
+      - targets: ['flower:8888']
+  # - job_name: 'app'
+  #   static_configs:
+  #     - targets: 
+  #         - 'app:8001'
+  #         - 'app:8002'
+  #         - 'app:8003'
+  #         - 'app:8004'
+
+  # - job_name: 'gunicorn'
+  #   static_configs:
+  #     - targets: ['statsd_exporter:9102']
+
+  # - job_name: 'nginx'
+  #   metrics_path: '/metrics'
+  #   static_configs:
+  #     - targets: ['nginx_exporter:9113']
+
+  # - job_name: 'prometheus'
+  #   static_configs:
+  #     - targets: ['localhost:9090']
