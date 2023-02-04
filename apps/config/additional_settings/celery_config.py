@@ -1,7 +1,7 @@
 import os
 
 # настройка celery
-from celery.schedules import crontab
+# from celery.schedules import crontab
 
 from config.settings import TIME_ZONE
 
@@ -21,10 +21,10 @@ CELERY_WORKER_CONCURRENCY = 1   # this is the one I was actually looking for
 CELERY_MAX_TASKS_PER_CHILD = 2
 
 
-CELERY_BEAT_SCHEDULE = {
-    'test_selery_beat': {
-        'task': 'linkshortener.tasks.test_task',
-        'schedule': crontab(),
-        'args': ()
-    },
-}
+# CELERY_BEAT_SCHEDULE = {
+#     'test_selery_beat': {
+#         'task': 'linkshortener.tasks.test_task',
+#         'schedule': crontab(),
+#         'args': ()
+#     },
+# }

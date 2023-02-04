@@ -34,7 +34,21 @@ class ShortLink(AbstractBaseModel):
     long_url = models.URLField(_('Long URL'), blank=True, null=True)
     subpart = models.CharField(_("Subpart"), max_length=128, null=True, blank=True)
 
+    class Meta:
+        verbose_name = 'Short link'
+        verbose_name_plural = 'Short links'
+
+    def __str__(self):
+        return f'{self.long_url}: {self.subpart}'
+
 
 class LinkVisit(AbstractBaseModel):
     short_link = models.ForeignKey(ShortLink, on_delete=models.CASCADE)
-    visit = models.PositiveIntegerField(_('Visit'), blank=True, null=True)
+    visit = models.PositiveIntegerField(_('Visit'), blank=True, default=0)
+
+    class Meta:
+        verbose_name = 'Link visit'
+        verbose_name_plural = 'Link visits'
+
+    def __str__(self):
+        return f'{self.short_link}: {self.visit}'
