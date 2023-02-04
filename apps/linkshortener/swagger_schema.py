@@ -27,3 +27,11 @@ CREATE_SHORT_LINK_RESPONSE = \
             )
         },
     }
+
+REDIRECT_SUBPART_PARAMETER = \
+    {
+        'manual_parameters': [
+            openapi.Parameter('subpart', openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True,
+                              description='subpart'),
+        ],
+    }
