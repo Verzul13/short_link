@@ -23,6 +23,7 @@ CREATE_SHORT_LINK_RESPONSE = \
                 type=openapi.TYPE_OBJECT,
                 properties={
                     'id': openapi.Schema(type=openapi.TYPE_STRING, description='uuid'),
+                    'subpart': openapi.Schema(type=openapi.TYPE_STRING, description='subpart'),
                 }
             )
         },
