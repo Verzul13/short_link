@@ -12,7 +12,7 @@ from drf_yasg.utils import swagger_auto_schema
 from linkshortener.tasks import write_redis_and_create_visit
 from .swagger_schema import CREATE_SHORT_LINK_RESPONSE, LIST_SHORT_LINK_PARAMETER
 from .models import ShortLink
-from .serializers import ShortLinkCreateSerializer, ShortLinkListSerializer
+from .serializers import ShortLinkCreateSerializer, ShortLinkSerializer
 from .utils import ValidationError
 
 
@@ -24,13 +24,16 @@ class ShortLinkView(CreateModelMixin, ListModelMixin, GenericViewSet):
     queryset = ShortLink.objects.all()
 
     def get_serializer_class(self):
-        return ShortLinkListSerializer
+        return ShortLinkSerializer
 
     @swagger_auto_schema(request_body=ShortLinkCreateSerializer,
                          **CREATE_SHORT_LINK_RESPONSE,
                          tags=["app"])
     def create(self, request) -> Response:
-
+        '''
+        Проверяет наличие subpart в БД, если его нет - создает объект ShortLink,
+        записывает его значение в кэш и создает запись в LinkVisit
+        '''
         serializer = ShortLinkCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
@@ -53,10 +56,17 @@ class ShortLinkView(CreateModelMixin, ListModelMixin, GenericViewSet):
         write_redis_and_create_visit.delay(short_link.id, subpart, serializer.validated_data['long_url'])
         logger.error(f'Succes when creating short_link: {short_link}')
 
-        return Response({"id": short_link.id}, status=HTTP_200_OK)
+        data = {
+            "id": short_link.id,
+            "subpart": subpart
+        }
+        return Response(data, status=HTTP_200_OK)
 
     @swagger_auto_schema(**LIST_SHORT_LINK_PARAMETER, tags=["app"])
     def list(self, request) -> Response:
+        '''
+        Возвращает список ShortLinks с пагинацией
+        '''
         params = request.query_params
         page = int(params.get("page", "1"))
         limit = int(params.get("limit", "10"))

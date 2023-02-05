@@ -14,6 +14,9 @@ from .tasks import update_visit_count
 @swagger_auto_schema(**REDIRECT_SUBPART_PARAMETER, method='GET', tags=["app"])
 @api_view(['GET'], )
 def redirect_subpart(request):
+    '''
+    Принимает subpart и редиректит на записынный в кэш или ShortLink url
+    '''
     subpart = request.GET.get('subpart')
     url = cache.get(f'subpart_{subpart}')
     if not url:
