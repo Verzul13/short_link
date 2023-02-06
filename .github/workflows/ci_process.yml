@@ -34,10 +34,10 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-          --maxclients 20000
-          --timeout 300
-          --appendonly yes
-          --replica-read-only no
+          # --maxclients 20000
+          # --timeout 300
+          # --appendonly yes
+          # --replica-read-only no
         env:
           ALLOW_EMPTY_PASSWORD: yes
 
