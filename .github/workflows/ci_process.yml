@@ -55,15 +55,15 @@ jobs:
             "settings.py"
           max-line-length: "120"
 
-      # - name: Run Unit Tests
-      #   env:
-      #     ENGINE: django.db.backends.mysql
-      #     MYSQL_DATABASE: linkshortener
-      #     MYSQL_NAME: root
-      #     MYSQL_PASS: debug
-      #     MYSQL_HOST: 127.0.0.1
-      #     DPORT: ${{ job.services.mysql.ports[3306] }}
-      #   run: |
-      #     cd apps/
-      #     python manage.py migrate
-      #     python manage.py test
+      - name: Run Unit Tests
+        env:
+          ENGINE: django.db.backends.mysql
+          MYSQL_DATABASE: linkshortener
+          MYSQL_NAME: root
+          MYSQL_PASS: debug
+          MYSQL_HOST: 127.0.0.1
+          DPORT: ${{ job.services.mysql.ports[3306] }}
+        run: |
+          cd apps/
+          python manage.py migrate
+          python manage.py test
