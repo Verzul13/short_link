@@ -7,10 +7,11 @@ from .models import ShortLink
 
 class ShortLinkSerializer(serializers.ModelSerializer):
     full_url = serializers.SerializerMethodField()
+    visit = serializers.IntegerField()
 
     class Meta:
         model = ShortLink
-        exclude = ['created_dt', 'updated_dt', 'is_deleted']
+        exclude = ['created_dt', 'updated_dt', 'is_deleted', 'id']
 
     def get_full_url(self, obj: ShortLink):
         from .api_views import create_full_url

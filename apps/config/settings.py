@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django_celery_beat',
     'drf_yasg',
     'rest_framework',
+    'django_prometheus',
 ]
 
 LOCAL_APPS = [
@@ -52,6 +53,7 @@ LOCAL_APPS = [
 INSTALLED_APPS += LOCAL_APPS
 
 MIDDLEWARE = [
+    'django_prometheus.middleware.PrometheusBeforeMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -59,6 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_prometheus.middleware.PrometheusAfterMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'

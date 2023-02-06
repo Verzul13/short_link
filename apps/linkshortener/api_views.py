@@ -3,8 +3,9 @@ import string
 import random
 
 from django.contrib.sites.shortcuts import get_current_site
-from rest_framework.request import Request
+from django.db.models import OuterRef
 
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from rest_framework.viewsets import GenericViewSet
@@ -14,7 +15,7 @@ from drf_yasg.utils import swagger_auto_schema
 
 from linkshortener.tasks import write_redis_and_create_visit
 from .swagger_schema import CREATE_SHORT_LINK_RESPONSE, LIST_SHORT_LINK_PARAMETER
-from .models import ShortLink
+from .models import ShortLink, LinkVisit
 from .serializers import ShortLinkCreateSerializer, ShortLinkSerializer
 from .utils import ValidationError
 
@@ -71,7 +72,9 @@ class ShortLinkView(CreateModelMixin, ListModelMixin, GenericViewSet):
         '''
         Возвращает список ShortLinks с пагинацией
         '''
-        queryset = self.queryset.order_by('-created_dt')
+        queryset = self.queryset.annotate(
+            visit=LinkVisit.objects.filter(short_link_id=OuterRef("id")).values('visit')
+        ).order_by('-created_dt')
         params = request.query_params
         page = int(params.get("page", "1"))
         limit = int(params.get("limit", "10"))

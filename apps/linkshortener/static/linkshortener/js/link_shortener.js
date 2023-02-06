@@ -1,5 +1,5 @@
 window.addEventListener("load", page_load)
-
+setInterval(get_short_link, 10000)
 
 let form_link_shortener_sended = (response) => {
     if (response['status_code'] != 200) {
@@ -59,6 +59,7 @@ function builder_link_row_html(short_links, hide = false) {
             <td>${short_links.long_url}</td>
             <td>${short_links.subpart}</td>
             <td>${short_links.full_url}</td>
+            <td>${short_links.visit}</td>
         </tr>
     `
     return short_links_html
