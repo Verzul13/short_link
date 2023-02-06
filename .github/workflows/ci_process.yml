@@ -38,6 +38,7 @@ jobs:
         # --timeout 300
         # --appendonly yes
         # --replica-read-only no
+        ports: ['6379:6379']
         env:
           ALLOW_EMPTY_PASSWORD: yes
           REDIS_PORT: 6379
