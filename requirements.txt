@@ -13,4 +13,3 @@ celery-prometheus-exporter==1.7.0
 mysqlclient==2.0.1
 django-mysql==3.8.1
 mysql-connector-python==8.0.26
-kombu==5.2.3

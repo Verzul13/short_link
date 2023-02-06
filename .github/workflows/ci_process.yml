@@ -43,7 +43,7 @@ jobs:
         env:
           RABBITMQ_USER: admin
           RABBITMQ_PASS: mypass
-          AMQP_URL: 'amqp://admin:admin@rabbitmq:5672'
+          AMQP_URL: 'amqp://admin:admin@127.0.0.1:5672'
 
     steps:
       - uses: actions/checkout@v2
