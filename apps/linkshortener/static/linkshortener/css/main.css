@@ -1,0 +1,119 @@
+html,
+body {
+    width: 100%;
+}
+
+.conteiner {
+    display: flex;
+}
+
+.container-center-form {
+    flex-direction: column;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+}
+
+.container-sm {
+    width: 100%;
+    max-width: 540px;
+}
+
+.form-control-btn {
+    margin-bottom: 15px;
+}
+
+.content {
+    margin-top: 30 px;
+}
+
+.logo {
+    margin-left: 20px;
+    margin-right: 10px;
+}
+
+.flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.settings_avatar {
+    border-radius: 1em;
+}
+
+.table-success {
+    vertical-align: middle;
+}
+
+.pagination_conteiner{
+    display:block;
+    margin-left: 20px;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+
+.margined_top{
+    margin-top:15px;
+}
+
+.btn_form{
+    width:100%;
+}
+
+.socialaccount_provider.vk{
+    background-image: url(https://img.icons8.com/color/48/000000/vk-com.png);
+    position:relative;    
+    width:48px;
+    height:48px;
+    overflow:hidden; 
+    margin-left:250px;
+    transition: transform .2s;
+   
+}
+
+.socialaccount_provider.vk:hover{
+    transform: scale(1.5);
+}    
+
+.socialaccount_provider.google{
+    background-image: url(https://img.icons8.com/color/48/000000/google-logo.png);
+    position:relative;    
+    width:48px;
+    height:48px;
+    overflow:hidden;
+    transition: transform .2s;
+    
+}
+
+.socialaccount_provider.google:hover{
+    transform: scale(1.5);
+}    
+
+.bblock {
+    float: left; 
+    line-height: 30px;
+    font-size: 30px;    
+    color: white;    
+    width: 30px; 
+    margin-right: 10px;
+    text-align: center;   
+}
+
+.preusername{
+    color: white;    
+}
+
+.username{
+    color: sandybrown;
+    padding: 0.3rem 0.3rem;  
+}
+
+.username:first-letter {
+    font-size: 130%;
+    color:red;
+  }
+
+.nav-link{
+    display: inline;
+}

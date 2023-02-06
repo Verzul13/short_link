@@ -1,0 +1,29 @@
+{% extends 'linkshortener/base_temlate.html' %}
+{% load static %}
+{% block script_content %}
+<script src="{% static 'linkshortener/js/link_shortener.js' %}"></script>
+{% endblock %}
+{% block content %}
+
+<div id="main_container" class="container container-md container-center-form">
+    <form id="link_shortener_form" method="POST" action="{% url 'linkshortener:short_link-list' %}" enctype="multipart/form-data" data-end="link_shortener">
+        {% csrf_token %}
+        {{ link_shortener_create_form.as_p }}
+        <button class="form-control btn btn-primary form-control-btn" onclick="send_form_ajax()">Shorten</button>
+        <div id="alert_link_shortener_form" class="alert" role="alert"></div>
+    </form>
+    <table id="table_id" class="table">
+        <thead>
+            <tr id="tr_1">
+                <th>Url</th>
+                <th>Subpart</th>
+                <th>Full URL</th>
+            </tr>
+        </thead>
+        <tbody id="table_body"></tbody>
+    </table>
+    <div id="pagination_container"></div>
+
+</div>
+
+{% endblock %}

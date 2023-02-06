@@ -22,17 +22,10 @@ CREATE_SHORT_LINK_RESPONSE = \
             200: openapi.Schema(
                 type=openapi.TYPE_OBJECT,
                 properties={
-                    'id': openapi.Schema(type=openapi.TYPE_STRING, description='uuid'),
+                    'old_url': openapi.Schema(type=openapi.TYPE_STRING, description='old url'),
                     'subpart': openapi.Schema(type=openapi.TYPE_STRING, description='subpart'),
+                    'url': openapi.Schema(type=openapi.TYPE_STRING, description='full url')
                 }
             )
         },
-    }
-
-REDIRECT_SUBPART_PARAMETER = \
-    {
-        'manual_parameters': [
-            openapi.Parameter('subpart', openapi.IN_QUERY, type=openapi.TYPE_STRING, required=True,
-                              description='subpart'),
-        ],
     }

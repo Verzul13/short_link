@@ -1,30 +1,37 @@
+from django.http import Http404
 from django.shortcuts import redirect
 from django.core.cache import cache
+from django.views.generic import TemplateView
+from django.shortcuts import render
 
-from rest_framework.decorators import api_view
-
-from drf_yasg.utils import swagger_auto_schema
-
-from .swagger_schema import REDIRECT_SUBPART_PARAMETER
 from .models import ShortLink
-from .utils import ValidationError
 from .tasks import update_visit_count
+from .forms import LinkshortenerCreateForm
 
 
-@swagger_auto_schema(**REDIRECT_SUBPART_PARAMETER, method='GET', tags=["app"])
-@api_view(['GET'], )
-def redirect_subpart(request):
+def redirect_subpart(request, subpart):
     '''
     Принимает subpart и редиректит на записынный в кэш или ShortLink url
     '''
-    subpart = request.GET.get('subpart')
     url = cache.get(f'subpart_{subpart}')
     if not url:
         short_link = ShortLink.objects.filter(subpart=subpart).first()
         if not short_link:
-            return ValidationError('Redirect url is missing')
+            raise Http404
         url = short_link.long_url
 
     update_visit_count.delay(subpart)
 
     return redirect(url)
+
+
+class MainPageView(TemplateView):
+    template_name = 'linkshortener/main_page.html'
+    link_shortener_create_form = LinkshortenerCreateForm
+
+    def get(self, request, *args, **kwargs):
+        data = {
+            "link_shortener_create_form": self.link_shortener_create_form,
+        }
+
+        return render(request, self.template_name, data)

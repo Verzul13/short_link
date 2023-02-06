@@ -16,11 +16,15 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
-from django.views.i18n import JavaScriptCatalog
-from django.conf.urls.i18n import i18n_patterns
-from rest_framework import permissions
+from django.views.generic.base import RedirectView
+from django.contrib.staticfiles.storage import staticfiles_storage
+
 from drf_yasg.views import get_schema_view
 from drf_yasg import openapi
+
+from rest_framework import permissions
+
+from linkshortener.views import MainPageView, redirect_subpart
 
 
 schema_view = get_schema_view(
@@ -36,14 +40,11 @@ schema_view = get_schema_view(
 )
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    # path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('favicon.ico')),),
-    path('i18n/', include('django.conf.urls.i18n')),
-    path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
-
+    path('system/admin/', admin.site.urls),
+    path('favicon.ico', RedirectView.as_view(url=staticfiles_storage.url('favicon.ico')),),
+    path('api/swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
+    path("<str:subpart>", redirect_subpart, name='redirect_subpart'),
     path("api/", include("linkshortener.urls", namespace='linkshortener')),
+    path('main_page/', MainPageView.as_view(), name='main_page'),
     # path('', include('django_prometheus.urls')),
 ]
-urlpatterns += i18n_patterns(
-    path('jsi18n/', JavaScriptCatalog.as_view(), name='javascript-catalog'),
-)

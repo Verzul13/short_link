@@ -175,7 +175,7 @@ from .additional_settings.celery_config import *
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-SWAGGER_URL = os.environ.get("SWAGGER_URL", "http://0.0.0.0:8009")
+SWAGGER_URL = os.environ.get("SWAGGER_URL", "http://0.0.0.0/api")
 
 ASGI_APPLICATION = 'config.asgi.application'
 

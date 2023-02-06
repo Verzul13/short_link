@@ -1,0 +1,27 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Linkshorter</title>
+    <link rel='shortcut icon' href="" />
+    <link rel="stylesheet" href="{% static 'linkshortener/css/bootstrap.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'linkshortener/css/fontawesome.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'linkshortener/css/main.css' %}">
+    {% block style_content %}{% endblock %}
+    <script src="{% static 'linkshortener/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'linkshortener/js/main.js' %}"></script>
+    {% block script_content %}{% endblock %}
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar navbar-dark bg-dark">
+    </nav>
+    {% block content %}{% endblock %}
+</body>
+
+</html>
