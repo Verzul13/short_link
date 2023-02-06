@@ -17,7 +17,7 @@ class TestViews(TestCase):
     def test_redirect_subpart_db_ok(self):
         # Отправляем get запрос с subpart, который есть в БД, получаем 302(редирект)
 
-        response = self.client.get(f"http://testserver/ZXCVBN",
+        response = self.client.get("http://testserver/ZXCVBN",
                                    catch_response=True,
                                    )
 
@@ -26,7 +26,7 @@ class TestViews(TestCase):
     def test_redirect_subpart_db_no_ok(self):
         # Отправляем get запрос с subpart, которого нет в БД, получаем 404
 
-        response = self.client.get(f"http://testserver/XXXXXX",
+        response = self.client.get("http://testserver/XXXXXX",
                                    catch_response=True,
                                    )
 
