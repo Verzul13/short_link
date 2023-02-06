@@ -27,17 +27,17 @@ jobs:
           MYSQL_DATABASE: linkshortener
         ports: ['3306:3306']
       redis:
-        image: redis:6.0.1-alpine
+        image: redis
         # Set health checks to wait until redis has started
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-          # --maxclients 20000
-          # --timeout 300
-          # --appendonly yes
-          # --replica-read-only no
+        # --maxclients 20000
+        # --timeout 300
+        # --appendonly yes
+        # --replica-read-only no
         env:
           ALLOW_EMPTY_PASSWORD: yes
 
