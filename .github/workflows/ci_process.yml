@@ -38,6 +38,12 @@ jobs:
         env:
           ALLOW_EMPTY_PASSWORD: yes
           REDIS_PORT: 6379
+      rabbitmq:
+        image: rabbitmq:latest
+        env:
+          RABBITMQ_USER: admin
+          RABBITMQ_PASS: mypass
+          AMQP_URL: 'amqp://admin:admin@rabbitmq:5672'
 
     steps:
       - uses: actions/checkout@v2
