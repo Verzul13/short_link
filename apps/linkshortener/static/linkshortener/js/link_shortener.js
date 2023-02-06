@@ -14,6 +14,7 @@ let form_link_shortener_sended = (response) => {
             document.getElementById("alert_link_shortener_form").innerHTML = ""
         }, 2000)
     } else {
+        document.getElementById("link_shortener_form").reset()
         get_short_link()
     }
 }
@@ -117,64 +118,6 @@ async function request_get_short_link(page) {
     return response
 }
 
-async function send_request(url, method = "GET", body = null, headers = null, response_type = "json") {
-    headers = headers ? headers : {}
-    body = body ? body : {}
-    const csrftoken = document.querySelector('input[name="csrfmiddlewaretoken"]')
-    console.log("body", body)
-    if (csrftoken) {
-        body['X-CSRFToken'] = csrftoken.value
-        headers['X-CSRFToken'] = csrftoken.value
-    }
-    let response = {
-        "status": null,
-        "data": null
-    }
-    let language = getCookie("language")
-    if (language) {
-        headers['language'] = language
-    }
-    headers['Accept'] = 'application/json',
-        headers['Content-Type'] = 'application/json'
-    if (method == "GET" && body) {
-        var get_params = new URLSearchParams(body).toString();
-        url += "?" + get_params
-        body = null
-    }
-    let request_body = {
-        method: method
-    }
-    if (headers) {
-        Object.defineProperty(request_body, 'headers', {
-            __proto__: null, // нет унаследованных свойств
-            value: headers
-        });
-    }
-    if (method != "GET" && body) {
-        Object.defineProperty(request_body, 'body', {
-            __proto__: null, // нет унаследованных свойств
-            value: JSON.stringify(body)
-        });
-    }
-
-    let request_response = await fetch(url, request_body)
-    if (request_response.ok) {
-        response['status'] = request_response.status
-        if (response_type == "json") {
-            data = await request_response.text()
-            response['data'] = data == "" ? {} : JSON.parse(data);
-        } else if (response_type == "blob") {
-            response['data'] = await request_response.blob();
-        } else {
-            response['data'] = await request_response.text();
-        }
-    } else {
-        response['status'] = request_response.status
-        response['data'] = await request_response.text()
-    }
-    return response
-}
-
 function select_page() {
     let el = event.target || event.srcElement
     if (el.tagName == "A") {
@@ -186,4 +129,3 @@ function select_page() {
         get_short_link()
     }
 }
-
