@@ -27,13 +27,19 @@ jobs:
           MYSQL_DATABASE: linkshortener
         ports: ['3306:3306']
       redis:
-        image: redis
+        image: redis:6.0.1-alpine
         # Set health checks to wait until redis has started
         options: >-
           --health-cmd "redis-cli ping"
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+          --maxclients 20000
+          --timeout 300
+          --appendonly yes
+          --replica-read-only no
+        env:
+          ALLOW_EMPTY_PASSWORD: yes
 
     steps:
       - uses: actions/checkout@v2
@@ -63,6 +69,7 @@ jobs:
           MYSQL_PASS: debug
           MYSQL_HOST: 127.0.0.1
           DPORT: ${{ job.services.mysql.ports[3306] }}
+          ALLOW_EMPTY_PASSWORD: yes
         run: |
           cd apps/
           python manage.py migrate
