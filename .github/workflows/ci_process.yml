@@ -34,10 +34,6 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
-        # --maxclients 20000
-        # --timeout 300
-        # --appendonly yes
-        # --replica-read-only no
         ports: ['6379:6379']
         env:
           ALLOW_EMPTY_PASSWORD: yes
@@ -54,14 +50,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest-django
-      # - name: flake8 Lint
-      #   uses: py-actions/flake8@v2
-      #   with:
-      #     exclude: |
-      #       "__init__.py"
-      #       "migrations"
-      #       "settings.py"
-      #     max-line-length: "120"
+      - name: flake8 Lint
+        uses: py-actions/flake8@v2
+        with:
+          exclude: |
+            "__init__.py"
+            "migrations"
+            "settings.py"
+          max-line-length: "120"
 
       - name: Run Unit Tests
         env:
