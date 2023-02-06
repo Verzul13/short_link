@@ -24,8 +24,8 @@ services:
     depends_on:
       - django
     volumes:
-      - static_volume:/esu/static
-      - ./media:/esu/media
+      - static_volume:/shortlink/static
+      - ./media:/shortlink/media
     networks:
       - proxynet
 
