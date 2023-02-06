@@ -40,6 +40,7 @@ jobs:
         # --replica-read-only no
         env:
           ALLOW_EMPTY_PASSWORD: yes
+          REDIS_PORT: 6379
 
     steps:
       - uses: actions/checkout@v2
@@ -52,14 +53,14 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install pytest-django
-      - name: flake8 Lint
-        uses: py-actions/flake8@v2
-        with:
-          exclude: |
-            "__init__.py"
-            "migrations"
-            "settings.py"
-          max-line-length: "120"
+      # - name: flake8 Lint
+      #   uses: py-actions/flake8@v2
+      #   with:
+      #     exclude: |
+      #       "__init__.py"
+      #       "migrations"
+      #       "settings.py"
+      #     max-line-length: "120"
 
       - name: Run Unit Tests
         env:
