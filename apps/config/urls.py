@@ -46,5 +46,5 @@ urlpatterns = [
     path("<str:subpart>", redirect_subpart, name='redirect_subpart'),
     path("api/", include("linkshortener.urls", namespace='linkshortener')),
     path('main_page/', MainPageView.as_view(), name='main_page'),
-    # path('', include('django_prometheus.urls')),
+    path('system/', include('django_prometheus.urls')),
 ]

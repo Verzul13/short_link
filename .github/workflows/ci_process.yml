@@ -26,6 +26,24 @@ jobs:
           MYSQL_ROOT_PASSWORD: debug
           MYSQL_DATABASE: linkshortener
         ports: ['3306:3306']
+      redis:
+        image: redis
+        # Set health checks to wait until redis has started
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports: ['6379:6379']
+        env:
+          ALLOW_EMPTY_PASSWORD: yes
+          REDIS_PORT: 6379
+      rabbitmq:
+        image: rabbitmq:latest
+        env:
+          RABBITMQ_USER: admin
+          RABBITMQ_PASS: mypass
+          AMQP_URL: 'amqp://admin:admin@127.0.0.1:5672'
 
     steps:
       - uses: actions/checkout@v2
@@ -49,27 +67,14 @@ jobs:
 
       # - name: Run Unit Tests
       #   env:
-      #     # POSTGRES_HOST: 127.0.0.1
-      #     # POSTGRES_PORT: 5432
-      #     # POSTGRES_USER: postgres
-      #     # POSTGRES_PASSWORD: postgres
-      #     # POSTGRES_DB: github_actions
-      #     # DATABASE_ENGINE: django.db.backends.postgresql
-      #     # MYSQL_PORT: 3306
-      #     # MYSQL_NAME: linkshortener
-      #     # MYSQL_ROOT_PASSWORD: debug
-      #     # MYSQL_PASS: debug
-      #     # MYSQL_DATABASE: linkshortener
-      #     # DATABASE_ENGINE: 'django.db.backends.mysql'
-      #     # NAME: 'linkshortener'
-      #     # USER: root
-      #     DBENGINE: django.db.backends.mysql
-      #     DBNAME: linkshortener
-      #     DBUSER: root
-      #     DBPASSWORD: debug
-      #     DBHOST: 127.0.0.1
-      #     DBPORT: ${{ job.services.mysql.ports[3306] }}
+      #     ENGINE: django.db.backends.mysql
+      #     MYSQL_DATABASE: linkshortener
+      #     MYSQL_NAME: root
+      #     MYSQL_PASS: debug
+      #     MYSQL_HOST: 127.0.0.1
+      #     DPORT: ${{ job.services.mysql.ports[3306] }}
+      #     ALLOW_EMPTY_PASSWORD: yes
       #   run: |
       #     cd apps/
       #     python manage.py migrate
-      #     # python manage.py test
+      #     python manage.py test
