@@ -20,3 +20,6 @@
 
 ###### Запуск тестов
     docker-compose run --rm django python manage.py test
+
+###### Запуск тестов
+    логи находятся в папке logs главной дирректории

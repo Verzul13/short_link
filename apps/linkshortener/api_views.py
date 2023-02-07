@@ -37,7 +37,7 @@ class ShortLinkView(CreateModelMixin, ListModelMixin, GenericViewSet):
         '''
         Проверяет наличие subpart в БД, если его нет - создает объект ShortLink,
         записывает его значение в кэш, создает запись в LinkVisit,
-        создает сессию до закрытия браузера пользователем 
+        создает сессию до закрытия браузера пользователем
         '''
         serializer = ShortLinkCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
