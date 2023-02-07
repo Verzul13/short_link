@@ -1,15 +1,13 @@
 import logging
 
 from django.db.models import OuterRef
-
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from rest_framework.viewsets import GenericViewSet
 from rest_framework.mixins import ListModelMixin, CreateModelMixin
-
 from drf_yasg.utils import swagger_auto_schema
 
-from linkshortener.tasks import write_redis_and_create_visit
+from .tasks import write_redis_and_create_visit
 from .swagger_schema import CREATE_SHORT_LINK_RESPONSE, LIST_SHORT_LINK_PARAMETER
 from .models import ShortLink, LinkVisit
 from .serializers import ShortLinkCreateSerializer, ShortLinkSerializer

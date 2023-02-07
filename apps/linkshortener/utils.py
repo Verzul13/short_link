@@ -2,7 +2,6 @@ import string
 import random
 
 from django.contrib.sites.shortcuts import get_current_site
-
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework import status

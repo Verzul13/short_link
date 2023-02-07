@@ -31,5 +31,5 @@ class ShortLinkCreateSerializer(serializers.ModelSerializer):
 
     def validate(self, data):
         if data.get('subpart') and ShortLink.objects.filter(subpart=data.get('subpart')).exists():
-            return ValidationError('This short link is already in the database')
+            raise ValidationError('This subpart is already in the database')
         return data

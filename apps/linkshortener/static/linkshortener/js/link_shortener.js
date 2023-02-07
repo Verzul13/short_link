@@ -5,7 +5,12 @@ let form_link_shortener_sended = (response) => {
     if (response['status_code'] != 200) {
         let error1 = Object.keys(response['data'])[0]
         let error2 = Object.values(response['data'])[0]
-        document.getElementById("alert_link_shortener_form").innerHTML = `${error1}: ${error2}`
+        if (error1 == "non_field_errors"){
+            document.getElementById("alert_link_shortener_form").innerHTML = error2
+        }
+        else{
+            document.getElementById("alert_link_shortener_form").innerHTML = `${error1}: ${error2}`
+        }
         document.getElementById("alert_link_shortener_form").classList.add("alert-danger")
         document.getElementById("alert_link_shortener_form").style.display = ""
         setTimeout(function () {
