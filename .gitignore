@@ -26,7 +26,3 @@ env.sh
 venv/
 ENV/
 env.sh
-.envs
-envs/
-.envs/*
-0016_auto_20221026_1748.py

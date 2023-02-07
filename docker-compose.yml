@@ -5,6 +5,7 @@ volumes:
   local_redis_data:
   static_volume:
   local_prometheus_data:
+  local_grafana_data:
 
 networks:
   proxynet:
@@ -155,29 +156,29 @@ services:
     networks:
       - proxynet
 
-  # grafana:
-  #   image: grafana/grafana
-  #   depends_on:
-  #     - prometheus
-  #     - loki
-  #   ports:
-  #     - 3000:3000
-  #   volumes:
-  #     - local_grafana_data:/var/lib/grafana
-  #     - ./grafana/dashboards:/var/lib/grafana/dashboards
-  #     - ./grafana/provisioning:/etc/grafana/provisioning
-  #   env_file:
-  #     - .envs/.grafana
-  #   networks:
-  #     - proxynet
+  grafana:
+    image: grafana/grafana
+    depends_on:
+      - prometheus
+      - loki
+    ports:
+      - 3000:3000
+    volumes:
+      - local_grafana_data:/var/lib/grafana
+      - ./grafana/dashboards:/var/lib/grafana/dashboards
+      - ./grafana/provisioning:/etc/grafana/provisioning
+    env_file:
+      - .envs/.grafana
+    networks:
+      - proxynet
 
  
-  # promtail:
-  #   image: grafana/promtail:2.4.0
-  #   volumes:
-  #     - ./apps/logs:/var/log
-  #     - ./compose/promtail:/etc/promtail
-  #   command: -config.file=/etc/promtail/promtail-config.yml
-  #   # restart: unless-stoped
-  #   networks:
-  #     - proxynet
+  promtail:
+    image: grafana/promtail:2.4.0
+    volumes:
+      - ./apps/logs:/var/log
+      - ./compose/promtail:/etc/promtail
+    command: -config.file=/etc/promtail/promtail-config.yml
+    # restart: unless-stoped
+    networks:
+      - proxynet

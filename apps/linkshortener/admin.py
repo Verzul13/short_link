@@ -10,4 +10,4 @@ class ShortLinkAdmin(admin.ModelAdmin):
 
 @admin.register(LinkVisit)
 class LinkVisitAdmin(admin.ModelAdmin):
-    list_display = ('short_link', 'visit')
+    list_display = ('short_link', 'number_of_visits')

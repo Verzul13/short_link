@@ -1,0 +1,16 @@
+DATABASE_ENGINE=django.db.backends.mysql
+REDIS_URL=redis://redis:6379
+SECRET_KEY=^l)7d*%h&db4uft@dk%h-w&nup#pu%)a!d)c7jwgoixo5_hm0$
+DEBUG=1
+DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 0.0.0.0 django
+SITE_ID=1
+
+MYSQL_HOST=0.0.0.0
+
+REDIS_HOST=redis
+REDIS_PORT=6379
+REDIS_URL=redis://redis:6379
+
+RABBITMQ_USER=admin
+RABBITMQ_PASS=mypass
+RABBITMQ_HOST=rabbitmq
