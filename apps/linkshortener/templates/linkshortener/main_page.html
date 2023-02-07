@@ -6,6 +6,7 @@
 {% block content %}
 
 <div id="main_container" class="container container-md container-center-form">
+    <input id="base_url" type="hidden" name="base_url" value="{{ base_url }}" />
     <form id="link_shortener_form" method="POST" action="{% url 'linkshortener:short_link-list' %}" enctype="multipart/form-data" data-end="link_shortener">
         {% csrf_token %}
         {{ link_shortener_create_form.as_p }}

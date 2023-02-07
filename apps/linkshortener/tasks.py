@@ -21,7 +21,7 @@ def update_visit_count(subpart: str) -> None:
     '''
     Увеличивает счетчик визитов у модели LinkVisit
     '''
-    LinkVisit.objects.filter(short_link__subpart=subpart).update(number_of_visits=F('number_of_visits')+1)
+    LinkVisit.objects.filter(short_link__subpart=subpart).update(visits_count=F('visits_count')+1)
 
 
 @app.task

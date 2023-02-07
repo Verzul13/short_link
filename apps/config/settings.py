@@ -25,9 +25,8 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(int(os.environ.get("DEBUG", default=1)))
-print("DEBUG", DEBUG)
-
 ALLOWED_HOSTS: list = os.environ.get("DJANGO_ALLOWED_HOSTS").split(" ")
+BASE_URL = os.environ.get("BASE_URL")
 
 
 # Application definition
@@ -86,19 +85,6 @@ WSGI_APPLICATION = 'config.wsgi.application'
 
 
 # Database
-# https://docs.djangoproject.com/en/4.1/ref/settings/#databases
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'mysql.connector.django',
-#         'NAME': os.environ.get("MYSQL_DATABASE"),
-#         'USER': os.environ.get("MYSQL_USER"),
-#         'PASSWORD': os.environ.get("MYSQL_PASS"),
-#         'HOST': os.environ.get("MYSQL_HOST"),
-#         'PORT': os.environ.get("MYSQL_PORT"),
-#     }
-# }
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
@@ -164,12 +150,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-LOCALE_PATHS = (
-    os.path.join(BASE_DIR, 'locale'),
-)
-
 os.makedirs('logs', exist_ok=True)
-
 
 from .additional_settings.celery_config import *
 
@@ -195,13 +176,7 @@ CORS_ALLOW_HEADERS = [
   'dnt',
   'user-agent',
   'x-csrftoken',
-  'x-requested-with',
-  'HTTP_REFRESH',
-  'refresh',
-  'worker',
-  'http_worker',
-  'X-Api-Key',
-  'language',
+  'x-requested-with'
 ]
 
 LOGGING = {
@@ -228,5 +203,3 @@ LOGGING = {
         }
     }
 }
-
-SITE_ID = 1
