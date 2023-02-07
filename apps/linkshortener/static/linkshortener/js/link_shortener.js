@@ -61,12 +61,13 @@ async function get_short_links() {
 
 }
 function builder_link_row_html(short_links, hide = false) {
+    let visit = short_links.visit ? short_links.visit : 0
     let short_links_html = `
         <tr> 
             <td>${short_links.long_url}</td>
             <td>${short_links.subpart}</td>
             <td>${short_links.full_url}</td>
-            <td>${short_links.visit}</td>
+            <td>${visit}</td>
         </tr>
     `
     return short_links_html
