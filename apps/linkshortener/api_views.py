@@ -1,11 +1,7 @@
 import logging
-import string
-import random
 
-from django.contrib.sites.shortcuts import get_current_site
 from django.db.models import OuterRef
 
-from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 from rest_framework.viewsets import GenericViewSet
@@ -17,7 +13,7 @@ from linkshortener.tasks import write_redis_and_create_visit
 from .swagger_schema import CREATE_SHORT_LINK_RESPONSE, LIST_SHORT_LINK_PARAMETER
 from .models import ShortLink, LinkVisit
 from .serializers import ShortLinkCreateSerializer, ShortLinkSerializer
-from .utils import ValidationError
+from .utils import ValidationError, create_full_url, random_generator
 
 
 logger = logging.getLogger("django")
@@ -42,13 +38,7 @@ class ShortLinkView(CreateModelMixin, ListModelMixin, GenericViewSet):
         serializer = ShortLinkCreateSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
 
-        subpart = random_generator()
-        if serializer.validated_data.get('subpart'):
-            subpart = serializer.validated_data.get('subpart')
-
-        short_link = ShortLink.objects.filter(subpart=subpart).first()
-        if short_link:
-            return ValidationError('This short link is already in the database')
+        subpart = serializer.validated_data.get('subpart', random_generator())
 
         session_key = request.session.session_key
         if not request.session.exists(session_key):
@@ -86,7 +76,7 @@ class ShortLinkView(CreateModelMixin, ListModelMixin, GenericViewSet):
         '''
         session_key = request.session.session_key
         queryset = self.queryset.filter(session_key=session_key).annotate(
-            visit=LinkVisit.objects.filter(short_link_id=OuterRef("id")).values('number_of_visits')
+            visit=LinkVisit.objects.filter(short_link_id=OuterRef("id")).values('visits_count')
         ).order_by('-created_dt')
         params = request.query_params
         page = int(params.get("page", "1"))
@@ -97,16 +87,3 @@ class ShortLinkView(CreateModelMixin, ListModelMixin, GenericViewSet):
         data = {'count': count, 'links': short_links}
 
         return Response(data)
-
-
-def random_generator(size=6, chars=string.ascii_uppercase + string.digits):
-    # Создает строку с рандомными англ.буквами и цифрами в верхнем регистре
-    return ''.join(random.choice(chars) for _ in range(size))
-
-
-def create_full_url(request: Request, subpart: str) -> str:
-    # Возвращает полный url ссылки
-    current_site = get_current_site(request)
-    full_url = f'http://{current_site}/{subpart}'
-
-    return full_url

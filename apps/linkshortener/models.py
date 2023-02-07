@@ -45,11 +45,11 @@ class ShortLink(AbstractBaseModel):
 
 class LinkVisit(AbstractBaseModel):
     short_link = models.ForeignKey(ShortLink, on_delete=models.CASCADE)
-    number_of_visits = models.PositiveIntegerField(_('Number_of_visits'), default=0)
+    visits_count = models.PositiveIntegerField(_('Visits count'), default=0)
 
     class Meta:
         verbose_name = 'Link visit'
         verbose_name_plural = 'Link visits'
 
     def __str__(self):
-        return f'{self.short_link}: {self.number_of_visits}'
+        return f'{self.short_link}: {self.visits_count}'

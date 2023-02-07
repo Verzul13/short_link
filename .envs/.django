@@ -4,6 +4,7 @@ SECRET_KEY=^l)7d*%h&db4uft@dk%h-w&nup#pu%)a!d)c7jwgoixo5_hm0$
 DEBUG=1
 DJANGO_ALLOWED_HOSTS=localhost 127.0.0.1 0.0.0.0 django
 SITE_ID=1
+BASE_URL=http://0.0.0.0
 
 MYSQL_HOST=0.0.0.0
 

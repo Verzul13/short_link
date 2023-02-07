@@ -1,5 +1,5 @@
 window.addEventListener("load", page_load)
-setInterval(get_short_link, 10000)
+setInterval(get_short_links, 10000)
 
 let form_link_shortener_sended = (response) => {
     if (response['status_code'] != 200) {
@@ -13,10 +13,11 @@ let form_link_shortener_sended = (response) => {
             document.getElementById("alert_link_shortener_form").classList.remove("alert-danger")
             document.getElementById("alert_link_shortener_form").innerHTML = ""
         }, 2000)
-    } else {
-        document.getElementById("link_shortener_form").reset()
-        get_short_link()
+        return
     }
+    document.getElementById("link_shortener_form").reset()
+    get_short_links()
+    return true
 }
 
 var form_functions = {
@@ -28,30 +29,31 @@ var current_page = 1
 
 
 async function page_load() {
-    await get_short_link()
+    await get_short_links()
 }
 
-async function get_short_link() {
+async function get_short_links() {
     let table_body = document.getElementById("table_body")
     let pagination_container = document.getElementById("pagination_container")
     let short_links = null
-    short_links = await request_get_short_link(current_page)
-    if (short_links.status == 200) {
-        if (short_links.data.count == 0) {
-            table_body.innerHTML = gettext("You have no orders yet")
-            return
-        }
-        let pagination = builder_short_link_pagination_html(short_links.data, "select_page")
-        let short_links_html = ''
-        short_links.data.links.forEach(function (item) {
-            let short_links_html_el = builder_link_row_html(item)
-            short_links_html += short_links_html_el
-        })
-        table_body.innerHTML = short_links_html
-        pagination_container.innerHTML = pagination
-    } else {
+    short_links = await request_get_short_links(current_page)
+    if (short_links.status != 200) {
         table_body.innerHTML = gettext("Server Error!")
+        return
     }
+    if (short_links.data.count == 0) {
+        table_body.innerHTML = gettext("You have no orders yet")
+        return
+    }
+    let pagination = builder_short_link_pagination_html(short_links.data, "select_page")
+    let short_links_html = ''
+    short_links.data.links.forEach(function (item) {
+        let short_links_html_el = builder_link_row_html(item)
+        short_links_html += short_links_html_el
+    })
+    table_body.innerHTML = short_links_html
+    pagination_container.innerHTML = pagination
+
 }
 function builder_link_row_html(short_links, hide = false) {
     let short_links_html = `
@@ -107,10 +109,11 @@ function builder_short_link_pagination_html(data, el_function = null) {
     return pagination_html
 }
 
-async function request_get_short_link(page) {
+async function request_get_short_links(page) {
     headers = {}
     response_type = "json"
-    let url = `http://0.0.0.0/api/v1/shortlink/`
+    let base_url = document.getElementById("base_url").value
+    let url = `${base_url}/api/v1/shortlink/`
     let body = {
         "page": page
     }
@@ -127,6 +130,6 @@ function select_page() {
     let page = parseInt(el.getAttribute("data-page"))
     if (page != current_page) {
         current_page = page
-        get_short_link()
+        get_short_links()
     }
 }

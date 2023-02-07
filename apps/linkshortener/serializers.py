@@ -1,5 +1,5 @@
 from django.core.validators import RegexValidator
-
+from rest_framework.exceptions import ValidationError
 from rest_framework import serializers
 
 from .models import ShortLink
@@ -14,7 +14,7 @@ class ShortLinkSerializer(serializers.ModelSerializer):
         exclude = ['created_dt', 'updated_dt', 'is_deleted', 'id']
 
     def get_full_url(self, obj: ShortLink):
-        from .api_views import create_full_url
+        from .utils import create_full_url
         return create_full_url(self.context['request'], obj.subpart)
 
 
@@ -28,3 +28,8 @@ class ShortLinkCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = ShortLink
         fields = ('link', 'subpart')
+
+    def validate(self, data):
+        if data.get('subpart') and ShortLink.objects.filter(subpart=data.get('subpart')).exists():
+            return ValidationError('This short link is already in the database')
+        return data
