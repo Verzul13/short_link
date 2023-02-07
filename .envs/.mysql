@@ -1,0 +1,9 @@
+# MySQL
+# ------------------------------------------------------------------------------
+
+MYSQL_PORT=3306
+MYSQL_NAME=root
+MYSQL_ROOT_PASSWORD=debug
+MYSQL_PASS=debug
+MYSQL_DATABASE=linkshortener
+MYSQL_HOST=db
