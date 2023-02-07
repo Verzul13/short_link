@@ -1,15 +1,22 @@
-###### ПОДКЛЮЧЕНИЕ К REDIS
-sudo docker exec -it redis sh
-redis-cli -a password123
-keys *
+###### Главная страница
+    http://0.0.0.0/main_page/
 
-celery -A config.celery_app --result-backend=redis://default:password123@0.0.0.0:6379/0 flower --port=5566
+###### Swagger
+    http://0.0.0.0/api/swagger/
 
-###### ПОДКЛЮЧЕНИЕ К MySQL
-docker exec -it debd9261542f mysql -u root -p linkshortener
-SHOW DATABASES;
-USE linkshortener;
-SHOW TABLES;
+###### Админка
+    http://0.0.0.0/system/admin/
 
-###### Создаль суперпользователя
+###### Prometheus
+    http://0.0.0.0:9091
+
+###### Grafana
+    http://0.0.0.0:3000
+    login: admin
+    password: 9uT46ZKE
+
+###### Создать суперпользователя
     docker-compose run --rm django python manage.py createsuperuser
+
+###### Запуск тестов
+    docker-compose run --rm django python manage.py test

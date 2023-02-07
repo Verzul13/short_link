@@ -105,14 +105,16 @@ class TestGetListShortLink(TestCase):
                     'full_url': f'http://testserver/{self.short_link_test_2.subpart}',
                     'visit': None,
                     'long_url': self.short_link_test_2.long_url,
-                    'subpart': self.short_link_test_2.subpart
+                    'subpart': self.short_link_test_2.subpart,
+                    'session_key': None
 
                 },
                 {
                     'full_url': f'http://testserver/{self.short_link_test_1.subpart}',
                     'visit': None,
                     'long_url': self.short_link_test_1.long_url,
-                    'subpart': self.short_link_test_1.subpart
+                    'subpart': self.short_link_test_1.subpart,
+                    'session_key': None
                 }
             ]
         }

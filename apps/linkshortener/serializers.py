@@ -27,4 +27,4 @@ class ShortLinkCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = ShortLink
-        exclude = ['created_dt', 'updated_dt', 'is_deleted']
+        fields = ('link', 'subpart')
